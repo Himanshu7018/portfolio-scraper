@@ -6,22 +6,22 @@
     </x-slot>
 
     <body class="dashboard">
-        <table class="mx-auto">
+        <table class="mx-auto mt-5">
             <thead>
                 <tr class="border border-dark text-center">
-                    <th>S.No</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>URL</th>
-                    <th>Technology</th>
-                    <th>Service Type</th>
-                    <th>Portfolio Status</th>
-                    <th>Actions</th>
+                    <th class="py-2 px-3">S.No</th>
+                    <th class="py-2 px-3">Title</th>
+                    <th class="py-2 px-3">Description</th>
+                    <th class="py-2 px-3">URL</th>
+                    <th class="py-2 px-3">Technology</th>
+                    <th class="py-2 px-3">Service Type</th>
+                    <th class="py-2 px-3">Portfolio Status</th>
+                    <th class="py-2 px-3">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($portfolios as $index => $portfolio)
-                    <tr class="border border-dark text-center">
+                    <tr class="border border-dark text-center fw-medium">
                         <td class="border border-dark px-4">{{ $index + 1 }}</td>
                         <td class="border border-dark px-4">{{ $portfolio->title }}</td>
                         <td class="border border-dark px-4">{{ $portfolio->description }}</td>

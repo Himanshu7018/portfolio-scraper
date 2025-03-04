@@ -24,7 +24,8 @@ Route::get('/', function () {
 
 // Route::get('/portfolios/search', [PortfolioController::class, 'search'])->name('portfolios.search');
 // Route::get('/', [PortfolioController::class, 'search']);
-Route::get('/portfolios/search', [PortfolioController::class, 'search']);
+//Route::get('/portfolios/search', [PortfolioController::class, 'search']);
+Route::get('/portfolios/search', [PortfolioController::class, 'search'])->name('portfolios.search');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
