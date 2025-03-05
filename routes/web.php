@@ -22,43 +22,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/portfolios/search', [PortfolioController::class, 'search'])->name('portfolios.search');
-// Route::get('/', [PortfolioController::class, 'search']);
-//Route::get('/portfolios/search', [PortfolioController::class, 'search']);
-Route::get('/portfolios/search', [PortfolioController::class, 'search'])->name('portfolios.search');
+Route::get('/portfolios/search', [PortfolioController::class, 'search'])
+    ->name('portfolios.search');
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::get('/dashboard', function () {
-//     $portfolios = App\Models\Portfolio::all(); // Fetch all portfolios from the database
-
-//     // Instantiate the controller to call the method
-//     $portfolioController = new \App\Http\Controllers\PortfolioController();
-
-//     // Check if URLs are active or inactive
-//     foreach ($portfolios as $portfolio) {
-//         $portfolio->status = $portfolioController->isLinkActive($portfolio->url) ? 'Active' : 'Inactive';
-//     }
-
-//     return view('dashboard', compact('portfolios')); // Pass portfolios to the view
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/dashboard', function () {
-    $portfolios = Portfolio::all(); // Fetch all portfolios from the database
-    $urls = $portfolios->pluck('url')->toArray(); // Collect URLs from the portfolios
-
-    // Batch check URLs using UrlHelper
-    $statuses = UrlHelper::checkUrls($urls);
-
-    // Map statuses back to portfolios
-    foreach ($portfolios as $portfolio) {
-        $portfolio->status = $statuses[$portfolio->url] ? 'Active' : 'Inactive';
-    }
-
-    return view('dashboard', compact('portfolios')); // Pass portfolios to the view
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [PortfolioController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 
 Route::middleware(['auth', 'verified'])->group(function () {

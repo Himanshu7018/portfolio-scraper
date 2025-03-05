@@ -8,107 +8,71 @@ use App\Helpers\UrlHelper;
 
 class PortfolioController extends Controller
 {
-    // public function search(Request $request)
-    // {
-    //     // Get the search query
-    //     $query = $request->input('query');
+    /**
+     * Common method to fetch portfolios based on filters and assign URL status.
+     */
+    protected function fetchPortfolios(Request $request)
+    {
+        $query     = $request->input('query', '');
+        $technology = $request->input('technology', '');
+        $serviceType = $request->input('service_type', '');
 
-    //     // Fetch portfolios based on the query, or all if no query provided
-    //     $portfolios = Portfolio::where('title', 'LIKE', "%$query%")
-    //         ->orWhere('description', 'LIKE', "%$query%")
-    //         ->orWhere('url', 'LIKE', "%$query%")
-    //         ->get();
+        $portfoliosQuery = Portfolio::query();
 
-    //     // Check if URLs are active or inactive
-    //     // foreach ($portfolios as $portfolio) {
-    //     //     $portfolio->status = $this->isLinkActive($portfolio->url) ? 'Active' : 'Inactive';
-    //     // }
-    //     foreach ($portfolios as $portfolio) {
-    //         $portfolio->status = UrlHelper::isLinkActive($portfolio->url) ? 'Active' : 'Inactive';
-    //     }
+        if (!empty($query)) {
+            $portfoliosQuery->where(function($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%")
+                  ->orWhere('description', 'LIKE', "%{$query}%")
+                  ->orWhere('url', 'LIKE', "%{$query}%");
+            });
+        }
+        if (!empty($technology)) {
+            $portfoliosQuery->where('technology', $technology);
+        }
+        if (!empty($serviceType)) {
+            $portfoliosQuery->where('service_type', $serviceType);
+        }
 
-    //     return view('portfolios.search', compact('portfolios', 'query'));
-    // }
+        $portfolios = $portfoliosQuery->get();
+
+        // Batch-check URL statuses using UrlHelper
+        $urls = $portfolios->pluck('url')->toArray();
+        $statuses = UrlHelper::checkUrls($urls);
+
+        // Map statuses back to portfolios safely
+        foreach ($portfolios as $portfolio) {
+            $portfolio->status = (isset($statuses[$portfolio->url]) && $statuses[$portfolio->url]) ? 'Active' : 'Inactive';
+        }
+
+        return $portfolios;
+    }
 
     /**
-     * Display the filtered search results.
+     * Search Page: Display filtered portfolios.
      */
     public function search(Request $request)
     {
-        // Retrieve the search term and filter inputs.
-        $searchTerm = $request->input('query');
-        $technology = $request->input('technology');
-        $serviceType = $request->input('service_type');
+        $portfolios = $this->fetchPortfolios($request);
 
-        // Start building the query.
-        $portfolios = Portfolio::query();
-
-        // Group the text field conditions to ensure proper AND combination.
-        if ($searchTerm) {
-            $portfolios->where(function ($q) use ($searchTerm) {
-                $q->where('title', 'LIKE', "%{$searchTerm}%")
-                ->orWhere('description', 'LIKE', "%{$searchTerm}%")
-                ->orWhere('url', 'LIKE', "%{$searchTerm}%");
-            });
-        }
-
-        // Apply the technology filter if provided.
-        if ($technology) {
-            $portfolios->where('technology', $technology);
-        }
-
-        // Apply the service type filter if provided.
-        if ($serviceType) {
-            $portfolios->where('service_type', $serviceType);
-        }
-
-        // Execute the query.
-        $portfolios = $portfolios->get();
-
-        foreach ($portfolios as $portfolio) {
-            $portfolio->status = UrlHelper::isLinkActive($portfolio->url) ? 'Active' : 'Inactive';
-        }
-
-        // Fetch unique technology and service types for dropdowns.
+        // Retrieve unique values for dropdown filters
         $technologies = Portfolio::select('technology')->distinct()->pluck('technology');
         $serviceTypes = Portfolio::select('service_type')->distinct()->pluck('service_type');
 
-        return view('portfolios.search', compact('portfolios', 'searchTerm', 'technologies', 'serviceTypes'));
+        return view('portfolios.search', compact('portfolios', 'technologies', 'serviceTypes'));
     }
 
-
     /**
-     * Display the dashboard with filtered results.
+     * Dashboard: Display filtered portfolios with extra actions (edit, delete).
      */
     public function dashboard(Request $request)
     {
-        $query = $request->input('query');
-        $technology = $request->input('technology');
-        $serviceType = $request->input('service_type');
+        $portfolios = $this->fetchPortfolios($request);
 
-        $portfolios = Portfolio::query();
-
-        if ($query) {
-            $portfolios->where('title', 'LIKE', "%$query%")
-                ->orWhere('description', 'LIKE', "%$query%")
-                ->orWhere('url', 'LIKE', "%$query%");
-        }
-
-        if ($technology) {
-            $portfolios->where('technology', $technology);
-        }
-
-        if ($serviceType) {
-            $portfolios->where('service_type', $serviceType);
-        }
-
-        $portfolios = $portfolios->get();
-
-        // Fetch unique technology and service types for dropdowns
+        // Retrieve unique values for dropdown filters (for admin use)
         $technologies = Portfolio::select('technology')->distinct()->pluck('technology');
         $serviceTypes = Portfolio::select('service_type')->distinct()->pluck('service_type');
 
-        return view('dashboard', compact('portfolios', 'query', 'technologies', 'serviceTypes'));
+        return view('dashboard', compact('portfolios', 'technologies', 'serviceTypes'));
     }
 
     // Function to check if a URL is active
