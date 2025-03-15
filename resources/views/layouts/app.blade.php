@@ -21,7 +21,7 @@
 
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
+                <header class="bg-gray-900">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -33,8 +33,9 @@
                 <div class="row mx-0">
                     <div class="md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col col-2 px-0">
                         <div class="flex min-vh-100 h-100 flex-1 flex-col bg-gray-800">
-                            <div class="flex h-16 flex-shrink-0 items-center bg-gray-900 px-4">
-                                <!-- <h2 class="text-white text-xl font-bold">{{ config('app.name') }}</h2> -->
+                            <div class="flex flex-shrink-0 bg-gray-900 px-2 flex-col pb-3">
+                                <p class="text-white">Welcome! to Dashboard</p>
+                                <h2 class="text-white fs-2 fw-bolder text-uppercase">{{ Auth::user()->name }}</h2>
                             </div>
                             <div class="flex-1 overflow-y-auto">
                                 <nav class="space-y-1 px-0 py-0">

@@ -35,8 +35,8 @@
                 </select>
             </div>
             <div class="col-md-2 d-flex justify-content-end gap-2">
-                <button type="submit" class="btn btn-primary">Search</button>
-                <button type="button" class="btn btn-secondary" id="clearFilters">Clear</button>
+                <button type="submit" class="btn btn-primary px-4">Search</button>
+                <button type="button" class="btn btn-secondary px-4" id="clearFilters">Clear</button>
             </div>
         </div>
     </form>
@@ -47,7 +47,7 @@
 
     <br>
 
-    <table class="mx-auto mt-4">
+    <table class="mx-auto">
         <thead>
             <tr class="border border-dark text-center">
                 <th class="py-2 px-3">S.No</th>

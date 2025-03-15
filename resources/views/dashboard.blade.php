@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight text-white">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
@@ -29,8 +29,8 @@
                     </select>
                 </div>
                 <div class="col-md-2 d-flex justify-content-end gap-2">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                    <button type="button" class="btn btn-secondary" id="clearFilters">Clear</button>
+                    <button type="submit" class="btn btn-primary px-4">Search</button>
+                    <button type="button" class="btn btn-secondary px-4" id="clearFilters">Clear</button>
                 </div>
             </div>
         </form>
