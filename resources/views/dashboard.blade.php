@@ -5,11 +5,11 @@
         </h2>
     </x-slot>
 
-    <div class="container mt-4">
+    <div class="mt-5 overflow-auto">
         <!-- Filter Form -->
         <form id="filterForm" method="GET" action="{{ route('dashboard') }}">
-            <div class="row">
-                <div class="col-md-4">
+            <div class="d-flex gap-3 justify-content-center">
+                <div class="col-md-3">
                     <input type="text" id="query" name="query" value="{{ request('query') }}" class="form-control" placeholder="Search by title, description, or URL">
                 </div>
                 <div class="col-md-3">
@@ -28,12 +28,18 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 d-flex justify-content-end gap-2">
                     <button type="submit" class="btn btn-primary">Search</button>
                     <button type="button" class="btn btn-secondary" id="clearFilters">Clear</button>
                 </div>
             </div>
         </form>
+
+        <div class="d-flex justify-content-end gap-3 py-4">
+            <button type="button" class="btn btn-success color-white" id="bulkCopy">Bulk Copy</button>
+            <button type="button" class="btn btn-danger" id="bulkDelete">Bulk Delete</button>
+        </div>
+
 
         <br>
 
@@ -49,6 +55,7 @@
                     <th>Service Type</th>
                     <th>Status</th>
                     <th>Actions</th>
+                    <th>Select</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,13 +76,16 @@
                             <span class="light-indicators" style="color: {{ $portfolio->status === 'Active' ? '#188518' : '#bd1919' }}; font-size: 40px;">&#x2022;</span>
                         </td>
                         <td>
-                            <a href="{{ route('admin.portfolio.edit', $portfolio->id) }}" class="btn btn-warning">Edit</a> |
+                            <a href="{{ route('admin.portfolio.edit', $portfolio->id) }}" class="btn btn-warning my-1">Edit</a> |
                             <form action="{{ route('admin.portfolio.delete', $portfolio->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this portfolio?');">Delete</button>
+                                <button type="submit" class="btn btn-danger my-1" onclick="return confirm('Are you sure you want to delete this portfolio?');">Delete</button>
                             </form>
                         </td>
+                        <td>                       
+                            <input class="form-check-input border border-dark" type="checkbox" value="{{ $portfolio->id }}" id="flexCheckDefault">
+                        </td>  
                     </tr>
                 @endforeach
             </tbody>
@@ -116,10 +126,7 @@
         serviceTypeDropdown.addEventListener("change", filterTable);
 
         clearFiltersBtn.addEventListener("click", function() {
-            queryInput.value = "";
-            technologyDropdown.value = "";
-            serviceTypeDropdown.value = "";
-            filterTable();
+            window.location.href = "{{ route('dashboard') }}";
         });
 
         filterTable();

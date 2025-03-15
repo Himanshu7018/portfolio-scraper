@@ -1,12 +1,10 @@
 <x-app-layout>
-    <style>
-        .container{
-            max-width: 1140px;
-            margin: 0 auto;
-        }
-    </style>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Add Portfolio') }}
+        </h2>
+    </x-slot>
     <div class="container mt-4">
-        <h1 class="text-2xl font-bold mb-4">Add New Portfolio</h1>
         <form action="{{ route('admin.portfolio.store') }}" method="POST">
             @csrf
             <div class="mb-4">
@@ -34,9 +32,9 @@
                 <input type="text" id="service_type" name="service_type" required
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
-            <div>
+            <div class="flex justify-content-center mt-4">
                 <button type="submit"
-                    class="inline-flex items-center px-4 py-2 border border-black rounded-md shadow-sm text-black bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="btn btn-primary bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     Save Portfolio
                 </button>
             </div>

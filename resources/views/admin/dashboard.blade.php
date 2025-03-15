@@ -1,26 +1,37 @@
-<!-- resources/views/admin/dashboard.blade.php -->
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-</head>
-<body> -->
 <x-app-layout>    
-    <!-- <h1>Welcome to Admin Dashboard</h1> -->
-<section class="max-w-6xl mx-auto mt-4 text-center" style="padding-bottom: 40px;">
-    <form action="{{ route('admin.upload') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="csv_file">Upload CSV File:</label>
-        <input type="file" name="csv_file" id="csv_file" required>
-        <button type="submit">Upload</button>
-    </form>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Bulk Upload') }}
+        </h2>
+    </x-slot>
 
-    @if (session('success'))
-        <p>{{ session('success') }}</p>
-    @endif
-</section>    
-</x-app-layout>    
-<!-- </body>
-</html> -->
+    <section class="max-w-6xl mx-auto mt-4 text-center" style="padding-bottom: 40px;">
+        <form action="{{ route('admin.upload') }}" method="POST" class="dropzone" id="csvDropzone" enctype="multipart/form-data">
+            @csrf
+        </form>
+        
+        @if (session('success'))
+            <p class="text-green-500 mt-4">{{ session('success') }}</p>
+        @endif
+    </section>    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css" />
+
+    <script>
+        Dropzone.options.csvDropzone = {
+            paramName: 'csv_file',
+            maxFiles: 1,
+            acceptedFiles: '.csv',
+            dictDefaultMessage: "Drag & drop your CSV file here or click to upload",
+            init: function () {
+                this.on("success", function (file, response) {
+                    alert("Upload successful!");
+                });
+                this.on("error", function (file, response) {
+                    alert("Upload failed: " + response);
+                });
+            }
+        };
+    </script>
+</x-app-layout>

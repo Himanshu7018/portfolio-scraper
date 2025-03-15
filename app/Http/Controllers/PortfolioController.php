@@ -121,7 +121,7 @@ class PortfolioController extends Controller
             'url' => 'nullable|url',
             'technology' => 'nullable|string',
             'service_type' => 'nullable|string',
-            'status' => 'required|string|in:Active,Inactive',
+            // 'status' => 'required|string|in:Active,Inactive',
         ]);
 
         $portfolio = Portfolio::findOrFail($id);
@@ -138,5 +138,14 @@ class PortfolioController extends Controller
         return redirect()->route('dashboard')->with('success', 'Portfolio deleted successfully!');
     }
 
-
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('portfolio_ids', []);
+        if (!empty($ids)) {
+            Portfolio::whereIn('id', $ids)->delete();
+            return response()->json(['success' => true, 'message' => 'Selected portfolios deleted successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'No portfolios selected.']);
+    }
+    
 }

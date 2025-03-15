@@ -41,6 +41,10 @@
         </div>
     </form>
 
+    <div class="d-flex justify-content-end gap-3 py-4">
+        <button type="button" class="btn btn-success color-white" id="bulkCopy">Bulk Copy</button>
+    </div>
+
     <br>
 
     <table class="mx-auto mt-4">
@@ -53,6 +57,7 @@
                 <th class="py-2 px-3">Technology</th>
                 <th class="py-2 px-3">Service Type</th>
                 <th class="py-2 px-3">Portfolio Status</th>
+                <th class="py-2 px-3">Select</th>
             </tr>
         </thead>
         <tbody class="border border-dark">
@@ -75,7 +80,10 @@
                         <td class="border border-dark px-4 py-1 portfolio-service">{{ $portfolio->service_type }}</td>
                         <td class="border border-dark px-4 py-1">
                             <span class="light-indicators" style="color: {{ $portfolio->status === 'Active' ? '#188518' : '#bd1919' }}; font-size: 40px;">&#x2022;</span>
-                        </td>    
+                        </td>  
+                        <td>                       
+                            <input class="form-check-input border border-dark" type="checkbox" value="{{ $portfolio->id }}" id="flexCheckDefault">
+                        </td>  
                     </tr>
                 @endforeach
             @endif
@@ -89,6 +97,7 @@
     </div>
 </footer>
 
+<script src="{{ asset('js/dashboard.js') }}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const queryInput = document.getElementById("query");
